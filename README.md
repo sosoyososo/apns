@@ -144,6 +144,15 @@ func main() {
 }
 ```
 
+### PEM file generation 
+  On mac , as soon as you configure your ios push envirement . Search your keychain and you will find a cert file like Apple iOS Push Service under a key file. Then export the key file to p12 file .
+  
+  excute command to convert p12 to pem file : 
+  ```openssl pkcs12 -in fileName.p12 -out ck.pem -nodes```
+
+### Device token string
+  Just output the device as HEX format
+
 ### Sending a notification
 ```go
 package main
@@ -160,10 +169,10 @@ func main() {
   payload.Sound = "bingbong.aiff"
 
   pn := apns.NewPushNotification()
-  pn.DeviceToken = "YOUR_DEVICE_TOKEN_HERE"
+  pn.DeviceToken = "HEX_FORMAT_DEVICE_TOKEN"
   pn.AddPayload(payload)
 
-  client := apns.NewClient("gateway.sandbox.push.apple.com:2195", "YOUR_CERT_PEM", "YOUR_KEY_NOENC_PEM")
+  client := apns.NewClient("gateway.sandbox.push.apple.com:2195", "ck.pem", "ck.pem")
   resp := client.Send(pn)
 
   alert, _ := pn.PayloadString()
